@@ -12,12 +12,16 @@ export const AuthProvider = ({ children }) => {
   const [authError, setAuthError] = useState(null);
   const [appPublicSettings, setAppPublicSettings] = useState(null);
 
+  console.log('AuthProvider: Initializing...');
+
   useEffect(() => {
+    console.log('AuthProvider: Starting checkAppState...');
     checkAppState();
     
     // Set up auth state listener
     const { data: { subscription } } = api.auth.onAuthStateChange(
       async (event, session) => {
+        console.log('AuthProvider: Auth state changed:', event);
         if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
           try {
             const currentUser = await api.auth.me();

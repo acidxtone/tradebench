@@ -139,6 +139,7 @@ const ErrorBoundary = ({ children }) => {
       <div className="text-center p-8">
         <h1 className="text-2xl font-bold text-slate-900 mb-4">Something went wrong</h1>
         <p className="text-slate-600 mb-4">The application encountered an error.</p>
+        <p className="text-slate-500 text-sm mb-4">Check browser console (F12) for details.</p>
         <button 
           onClick={() => window.location.reload()} 
           className="px-4 py-2 bg-slate-900 text-white rounded hover:bg-slate-800"
