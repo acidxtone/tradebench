@@ -48,7 +48,7 @@ export default function Study() {
     queryKey: ['studyGuides', user?.selected_year],
     queryFn: async () => {
       if (!user?.selected_year) return [];
-      const results = await api.entities.StudyGuide.filter({ year: user?.selected_year });
+      const results = await api.studyGuides.getByYear(user?.selected_year);
       return results;
     },
     enabled: !!user?.selected_year
