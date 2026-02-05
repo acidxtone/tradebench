@@ -43,16 +43,26 @@ export const AuthProvider = ({ children }) => {
   const checkAppState = async () => {
     try {
       setIsLoadingPublicSettings(true);
+      setIsLoadingAuth(true);
       setAuthError(null);
       
       // Check if user is authenticated
-      const currentUser = await api.auth.me();
-      setUser(currentUser);
-      setIsAuthenticated(true);
-      setAppPublicSettings({ id: 'supabase', public_settings: {} });
-      
-      // Log user activity
-      await api.appLogs.logUserInApp();
+      try {
+        const currentUser = await api.auth.me();
+        setUser(currentUser);
+        setIsAuthenticated(true);
+        setAppPublicSettings({ id: 'supabase', public_settings: {} });
+        
+        // Log user activity
+        await api.appLogs.logUserInApp();
+      } catch (authError) {
+        // User is not authenticated - this is normal for Login page
+        console.log('User not authenticated - redirecting to login');
+        setUser(null);
+        setIsAuthenticated(false);
+        setAuthError(null);
+        setAppPublicSettings({ id: 'supabase', public_settings: {} });
+      }
     } catch (error) {
       console.error('Auth check failed:', error);
       
