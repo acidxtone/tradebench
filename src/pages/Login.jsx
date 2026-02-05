@@ -18,6 +18,12 @@ export default function Login() {
   const [fullName, setFullName] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   
+  // Debug: Check if environment variables are loaded
+  console.log('Environment check:', {
+    supabaseUrl: import.meta.env.VITE_SUPABASE_URL ? 'SET' : 'NOT SET',
+    supabaseKey: import.meta.env.VITE_SUPABASE_ANON_KEY ? 'SET' : 'NOT SET'
+  });
+  
   const { signIn, signInWithGoogle, signUp, authError } = useAuth();
   const navigate = useNavigate();
 
