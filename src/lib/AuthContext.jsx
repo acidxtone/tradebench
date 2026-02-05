@@ -65,6 +65,13 @@ export const AuthProvider = ({ children }) => {
     const { data: { subscription } } = api.auth.onAuthStateChange(
       async (event, session) => {
         console.log('AuthProvider: Auth state changed:', event);
+        
+        // Ignore INITIAL_SESSION event to prevent re-initialization loop
+        if (event === 'INITIAL_SESSION') {
+          console.log('AuthProvider: Ignoring INITIAL_SESSION event');
+          return;
+        }
+        
         if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
           try {
             const currentUser = await api.auth.me();
@@ -84,7 +91,10 @@ export const AuthProvider = ({ children }) => {
       }
     );
 
-    return () => subscription.unsubscribe();
+    return () => {
+      console.log('AuthProvider: Cleaning up subscription...');
+      subscription.unsubscribe();
+    };
   }, []);
 
   const signIn = async (email, password) => {
