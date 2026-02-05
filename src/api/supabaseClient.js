@@ -188,12 +188,15 @@ const entities = {
   Question: {
     async filter({ year, section }) {
       try {
+        console.log('supabaseClient.js - Question.filter called with:', { year, section, yearType: typeof year });
         let query = supabase.from('questions').select('*');
         
         if (year != null) {
+          console.log('supabaseClient.js - Filtering by year:', year);
           query = query.eq('year', year);
         }
         if (section != null) {
+          console.log('supabaseClient.js - Filtering by section:', section);
           query = query.eq('section', section);
         }
         
@@ -204,6 +207,7 @@ const entities = {
           return [];
         }
         
+        console.log('supabaseClient.js - Questions returned:', data?.length || 0);
         return data || [];
       } catch (error) {
         console.error('Error filtering questions:', error);

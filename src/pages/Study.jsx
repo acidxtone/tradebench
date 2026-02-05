@@ -58,7 +58,9 @@ export default function Study() {
     queryKey: ['questions', user?.selected_year],
     queryFn: async () => {
       if (!user?.selected_year) return [];
+      console.log('Study.jsx - Fetching questions for year:', user?.selected_year, 'type:', typeof user?.selected_year);
       const results = await api.entities.Question.filter({ year: user?.selected_year });
+      console.log('Study.jsx - Questions fetched:', results.length);
       return results;
     },
     enabled: !!user?.selected_year
