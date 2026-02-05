@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useAuth } from './AuthContext';
 import { api } from '@/api/localClient';
-import { pagesConfig } from '@/pages.config';
+import { pagesConfig } from '@/page.config';
 
 export default function NavigationTracker() {
     const location = useLocation();
