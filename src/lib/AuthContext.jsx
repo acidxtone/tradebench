@@ -14,36 +14,6 @@ export const AuthProvider = ({ children }) => {
 
   console.log('AuthProvider: Initializing...');
 
-  useEffect(() => {
-    console.log('AuthProvider: Starting checkAppState...');
-    checkAppState();
-    
-    // Set up auth state listener
-    const { data: { subscription } } = api.auth.onAuthStateChange(
-      async (event, session) => {
-        console.log('AuthProvider: Auth state changed:', event);
-        if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
-          try {
-            const currentUser = await api.auth.me();
-            setUser(currentUser);
-            setIsAuthenticated(true);
-            setAuthError(null);
-          } catch (error) {
-            console.error('Auth state change error:', error);
-            setAuthError({ type: 'unknown', message: error.message || 'Authentication error' });
-          }
-        } else if (event === 'SIGNED_OUT') {
-          setUser(null);
-          setIsAuthenticated(false);
-          setAuthError(null);
-        }
-        setIsLoadingAuth(false);
-      }
-    );
-
-    return () => subscription.unsubscribe();
-  }, []);
-
   const checkAppState = async () => {
     try {
       setIsLoadingPublicSettings(true);
@@ -86,6 +56,36 @@ export const AuthProvider = ({ children }) => {
       setIsLoadingAuth(false);
     }
   };
+
+  useEffect(() => {
+    console.log('AuthProvider: Starting checkAppState...');
+    checkAppState();
+    
+    // Set up auth state listener
+    const { data: { subscription } } = api.auth.onAuthStateChange(
+      async (event, session) => {
+        console.log('AuthProvider: Auth state changed:', event);
+        if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
+          try {
+            const currentUser = await api.auth.me();
+            setUser(currentUser);
+            setIsAuthenticated(true);
+            setAuthError(null);
+          } catch (error) {
+            console.error('Auth state change error:', error);
+            setAuthError({ type: 'unknown', message: error.message || 'Authentication error' });
+          }
+        } else if (event === 'SIGNED_OUT') {
+          setUser(null);
+          setIsAuthenticated(false);
+          setAuthError(null);
+        }
+        setIsLoadingAuth(false);
+      }
+    );
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   const signIn = async (email, password) => {
     try {
